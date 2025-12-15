@@ -65,4 +65,8 @@ Requirements are based on the official [Pi-hole Documentation](https://docs.pi-h
 ## How to create VM and V-Switch
 The Pi-hole virtual machine and the virtual switch are created using a PowerShell script.
 
-See: `scripts/create-pihole-vm.ps1`
+- [Create External Virtual Switch](../scripts/create-v-switch.ps1)
+- [Create Pi-hole Virtual Machine](../scripts/create-pihole-vm.ps1)
+
+These scripts automate the Hyper-V configuration and ensure a consistent setup.
+

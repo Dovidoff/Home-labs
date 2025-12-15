@@ -6,50 +6,31 @@
 ```mermaid
 graph TB
     HyperV[Hyper-V Hypervisor]
-    
-    VSwitch[Virtual Switch]
-    
-    VM[Virtual Machine]
-    
-    subgraph VM_Resources
-        vCPU[1 vCPU]
-        RAM[1 GB RAM]
-        Disk[16-32 GB Disk]
+
+    VSwitch[External Virtual Switch]
+
+    VM[Virtual Machine: pihole-vm]
+
+    subgraph VM_Resources["VM Resources"]
+        vCPU[2 vCPU]
+        RAM[2 GB RAM]
+        Disk["32 GB Disk"]
         vNIC[Virtual NIC]
     end
-    
+
     GuestOS[Ubuntu]
-    
-    PiHole[Pi-hole Service]
-    
-    Network[Physical Network]
-    
-    HyperV --> VSwitch
+    PiHole[Pi-hole DNS Service]
+    Network["Physical Network (LAN)"]
+
     HyperV --> VM
-    VSwitch --> Network
     VM --> VM_Resources
     VM_Resources --> GuestOS
     GuestOS --> PiHole
-    PiHole -.-> Network
+
+    vNIC --> VSwitch
+    VSwitch --> Network
 ```
 
-## Virtual Machine Specifications
-| Component | Specification |
-|-----------|---------------|
-| **VM Name** | pihole-vm |
-| **Hypervisor** | Hyper-V (Type 1) |
-| **Guest OS** | Ubuntu Linux |
-| **vCPU** | 1 core |
-| **RAM** | 1 GB |
-| **Storage** | 16-32 GB virtual disk |
-| **Network** | Virtual NIC → Virtual Switch |
-| **Services** | Pi-hole DNS |
-| **IP Address** | 192.168.1.10 |
-## Hyper-V Host
-
-- Operating System: Windows Server
-- Hypervisor: Hyper-V
-- Role: The host for the Pi-hole virtual machine
 ## Prerequisites
 
 ### Source

@@ -1,6 +1,10 @@
 # Network
 
-![Network Diagram](NetworkDiagram.drawio.svg)
+<div align="center">
+
+<img src="NetworkDiagram.drawio.svg" alt="Network Diagram" width="500"/>
+
+</div>
 
 ## IP Plan
 

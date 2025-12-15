@@ -1,5 +1,7 @@
 # Network
 
+![Network Diagram](NetworkDiagram.drawio.svg)
+
 ## IP Plan
 
 | Device | IP Address | Type |

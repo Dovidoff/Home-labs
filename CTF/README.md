@@ -13,3 +13,4 @@ The CTF is designed as a learning lab and academic submission.
 ## How to start
 The challenge begins with a corrupted image file:
 
+![fixme](https://github.com/user-attachments/assets/5f3beea7-3551-4157-97d8-c4ec312e178f)

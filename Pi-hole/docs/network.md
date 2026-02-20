@@ -6,57 +6,88 @@
 
 </div>
 
-## IP Plan
+# Network Design and Configuration
 
-| Device | IP Address | Type |
-|------|------------|------|
-| Router | 192.168.1.1 | Static |
-| Windows Server (Hyper-V Host) | 192.168.1.5 | Static |
-| Pi-hole VM | 192.168.1.10 | Static |
-| Clients (DHCP range) | 192.168.1.20 – 192.168.1.254 | DHCP |
+This document describes the network topology, IP addressing, and key design decisions for the Pi-hole home lab. For a visual overview see the [network diagram](NetworkDiagram.drawio.svg).
 
+---
 
-## How DNS Works 
-A network router takes care of giving clients their DNS configurations through DHCP. The router will let the clients know about the Pi-hole virtual machine as the main DNS server.
-```mermaid
-graph TB
-    %% Layers
-    Internet[Internet]
-    Router[Router]
-    Switch[Switch]
-    Server[Hyper-V Host]
-    PiHole[Pi-hole<br/>DNS]
-    Clients[Clients<br/>Wi-Fi / LAN]
+## Topology
 
-    %% Physical connections (solid)
-    Internet --> Router
-    Router --> Switch
-    Switch --> Server
-    Server --> PiHole
-    Switch --> Clients
+The router handles internet access only. Pi-hole acts as both the DNS server and DHCP server for all devices on the network — wired and wireless.
 
-    %% DNS flow (dashed, left-to-right)
-    Clients -. DNS Query .-> PiHole
-    PiHole -. Forward DNS .-> Internet
-    Internet -. DNS Response .-> PiHole
-    PiHole -. DNS Response .-> Clients
 ```
-When a client does a DNS query:
+Internet
+    |
+  Router (D-Link) — gateway only
+  192.168.0.1
+    |
+  Network Switch
+    |
+  Hyper-V Host
+  192.168.0.100
+    |
+  Pi-hole VM — DNS + DHCP
+  192.168.0.150
+```
 
-1. The client's DNS request is sent to the Pi-hole virtual machine.
-2. The Pi-hole checks its local blocklist databases for any records matching the requested domain.
-3. If there are no matching records indicating that the domain should be blocked, the Pi-hole then searches its local cache for any cached records (if they exist).
-4. If there are no cached records, the Pi-hole forwards the request to its configured upstream DNS resolver (the DNS server(s) specified in the configuration).
-5. When responding to the request from the Pi-hole, the upstream DNS resolver will return the response back to the Pi-hole.
-6. Finally, the Pi-hole sends the DNS resolution result to the client.
+---
 
-## DHCP
-The DHCP service is handled by the router, and the Pi-hole does not serve as a DHCP server.
+## IP Address Scheme
 
-## Network Assumptions
-- There is one LAN network.
-- There are no Virtual LANs (VLANs).
-- IPv4 is the only protocol being used.
-- The Pi-hole has a static IP address.
-- The router will only forward any DNS traffic through the Pi-hole.
+| Device | Role | IP Address |
+|--------|------|------------|
+| Router (D-Link) | Gateway / internet access | 192.168.0.1 |
+| Hyper-V Host | Windows host machine | 192.168.0.100 |
+| Pi-hole VM | DNS + DHCP server | 192.168.0.150 |
+| Network devices | Assigned by Pi-hole | 192.168.0.x |
 
+Pi-hole has a static IP. A DNS and DHCP server must always be reachable at the same address.
+
+---
+
+## Why Pi-hole Handles DHCP
+
+The router normally handles DHCP and tells devices which DNS server to use. The D-Link router used in this lab has DNS handling issues that caused it to interfere with and bypass the Pi-hole configuration.
+
+Moving DHCP to Pi-hole solves this cleanly — Pi-hole assigns IP addresses directly to devices and tells them to use itself as DNS. The router is no longer involved in DNS at any point.
+
+The trade-off is that if the Pi-hole VM goes offline, devices cannot get an IP address and lose network access. This is acceptable in a lab environment.
+
+---
+
+## Upstream DNS
+
+Allowed queries are forwarded to **Quad9 (9.9.9.9)**. Quad9 was chosen because it blocks known malicious domains at the resolver level, supports DNSSEC to protect against DNS spoofing, and does not log or sell query data — a good fit alongside Pi-hole's own blocklists.
+
+---
+
+## DNS Query Flow
+
+1. Device sends a DNS query to Pi-hole (192.168.0.150)
+2. Pi-hole checks the domain against its blocklists
+3. **Blocked** — returns NXDOMAIN, no connection is made
+4. **Allowed** — query forwarded to Quad9, real IP returned to device
+5. Device connects and content loads
+
+---
+
+## Hyper-V Virtual Switch
+
+The Pi-hole VM needs to be reachable by all devices on the physical network, not just the Hyper-V host. An external virtual switch in Hyper-V bridges the VM's network adapter to the host's physical adapter, making Pi-hole appear as a regular device on the network at 192.168.0.150.
+
+See [virtualization.md](virtualization.md) for setup details.
+
+---
+
+## Planned Expansion
+
+The next step is connecting physical wired devices through the switch to verify that DHCP leases are assigned correctly, DNS filtering works for wired clients, and per-device blocking rules behave as expected. New devices will appear automatically in the Pi-hole dashboard once connected.
+
+---
+
+## References
+
+- [Pi-hole DHCP documentation](https://docs.pi-hole.net/guides/misc/dhcp/)
+- [Quad9 DNS](https://www.quad9.net/)
+- [Hyper-V virtual switch — Microsoft](https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/get-started/create-a-virtual-switch-for-hyper-v-virtual-machines)

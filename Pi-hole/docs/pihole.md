@@ -121,6 +121,5 @@ The downside is that the host machine has to be turned on in order for Pi-hole
 
 ## Further Reading
 
-- [Pi-hole Documentation](https://docs.pi-hole.net/)  
-- [Pi-hole Blocklist Overview](https://docs.pi-hole.net/guides/dns/blocklists/)  
+- [Pi-hole Documentation](https://docs.pi-hole.net/)   
 - [Understanding DNS Cloudflare](https://www.cloudflare.com/learning/dns/what-is-dns/)  

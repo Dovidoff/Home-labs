@@ -214,5 +214,5 @@ pihole -a -p
 
 - [Ubuntu Server 24.04 Download](https://ubuntu.com/download/server)
 - [Pi-hole Installation Documentation](https://docs.pi-hole.net/main/basic-install/)
-- [Pi-hole DHCP Setup](https://docs.pi-hole.net/guides/misc/dhcp/)
+- [Pi-hole DHCP Setup](https://discourse.pi-hole.net/t/how-do-i-use-pi-holes-built-in-dhcp-server-and-why-would-i-want-to/3026)
 - [Netplan Documentation](https://netplan.io/reference)

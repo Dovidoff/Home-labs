@@ -110,6 +110,8 @@ curl -sSL https://install.pi-hole.net | bash
 ```
 
 The installer will open a dialog-based setup. Make the following selections:
+- [Read more about upstream DNS provider](https://docs.pi-hole.net/guides/dns/upstream-dns-providers/)
+- [Blocklists](https://firebog.net/)
 
 | Prompt | Selection |
 |--------|-----------|

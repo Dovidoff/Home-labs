@@ -14,7 +14,7 @@ This document describes the network topology, IP addressing, and key design deci
 
 ## Topology
 
-The router handles internet access only. Pi-hole acts as both the DNS server and DHCP server for all devices on the network — wired and wireless.
+The router handles internet access only. Pi-hole acts as both the DNS server and DHCP server for all devices on the network wired and wireless.
 
 ```
 Internet
@@ -50,7 +50,7 @@ Pi-hole has a static IP. A DNS and DHCP server must always be reachable at the s
 
 The router normally handles DHCP and tells devices which DNS server to use. The D-Link router used in this lab has DNS handling issues that caused it to interfere with and bypass the Pi-hole configuration.
 
-Moving DHCP to Pi-hole solves this cleanly — Pi-hole assigns IP addresses directly to devices and tells them to use itself as DNS. The router is no longer involved in DNS at any point.
+Moving DHCP to Pi-hole solves this cleanly. Pi-hole assigns IP addresses directly to devices and tells them to use itself as DNS. The router is no longer involved in DNS at any point.
 
 The trade-off is that if the Pi-hole VM goes offline, devices cannot get an IP address and lose network access. This is acceptable in a lab environment.
 

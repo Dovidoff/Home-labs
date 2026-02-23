@@ -88,6 +88,6 @@ The next step is connecting physical wired devices through the switch to verify 
 
 ## References
 
-- [Pi-hole DHCP documentation](https://docs.pi-hole.net/guides/misc/dhcp/)
+- [Pi-hole DHCP documentation](https://discourse.pi-hole.net/t/how-do-i-use-pi-holes-built-in-dhcp-server-and-why-would-i-want-to/3026)
 - [Quad9 DNS](https://www.quad9.net/)
-- [Hyper-V virtual switch — Microsoft](https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/get-started/create-a-virtual-switch-for-hyper-v-virtual-machines)
+- [Hyper-V virtual switch Microsoft](https://learn.microsoft.com/en-us/windows-server/virtualization/hyper-v/get-started/create-a-virtual-switch-for-hyper-v-virtual-machines)
